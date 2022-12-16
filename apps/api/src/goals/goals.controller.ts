@@ -18,16 +18,16 @@ export class GoalsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.goalsService.findOne(+id);
+    return this.goalsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGoalDto: Partial<Goal>) {
-    return this.goalsService.update(+id, updateGoalDto);
+    return this.goalsService.update(id, updateGoalDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.goalsService.remove(+id);
+    return this.goalsService.remove(id);
   }
 }

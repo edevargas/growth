@@ -1,4 +1,4 @@
-export class GrowthArea {
+export interface GrowthArea {
   id: string;
   name: string;
   description: string;

@@ -1,25 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { Goal } from '@flab/api-data';
+import { apiMocks } from '@flab/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GoalsService {
-  create(createGoalDto: Goal) {
-    return 'This action adds a new goal';
+
+  goalsMock = apiMocks.goalsMock;
+
+  create(goal: Goal) {
+    this.goalsMock = [...this.goalsMock, Object.assign({}, goal, { id: uuidv4() })];
+    return this.goalsMock;
   }
 
   findAll() {
-    return `This action returns all goals`;
+    return this.goalsMock;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} goal`;
+  findOne(id: string) {
+    return this.goalsMock.find((goal) => goal.id === id);
   }
 
-  update(id: number, updateGoalDto: Partial<Goal>) {
-    return `This action updates a #${id} goal`;
+  update(id: string, goalUpdate: Partial<Goal>) {
+    this.goalsMock = this.goalsMock.map((goal) => (goal.id === id ? {...goal, ...goalUpdate,} : goal));
+    return this.goalsMock;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} goal`;
+  remove(id: string) {
+    this.goalsMock = this.goalsMock.filter((goal) => goal.id !== id);
+    return this.goalsMock;
   }
 }
+

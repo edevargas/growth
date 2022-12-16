@@ -1,25 +1,32 @@
 import { GrowthArea } from '@flab/api-data';
+import { apiMocks } from '@flab/utils';
 import { Injectable } from '@nestjs/common';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class GrowthAreasService {
-  create(createAreaDto: GrowthArea) {
-    return 'This action adds a new area';
+
+  growthAreasMock = apiMocks.growthAreasMock;
+
+  create(growthArea: GrowthArea) {
+    this.growthAreasMock = [...this.growthAreasMock, Object.assign({}, growthArea, { id: uuidv4() })];
+    return this.growthAreasMock;
   }
 
   findAll() {
-    return `This action returns all areas`;
+    return this.growthAreasMock;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} area`;
+  findOne(id: string) {
+    return this.growthAreasMock.find((growthArea) => growthArea.id === id);
   }
 
-  update(id: number, updateAreaDto: Partial<GrowthArea>) {
-    return `This action updates a #${id} area`;
+  update(id: string, growthAreaUpdate: Partial<GrowthArea>) {
+    this.growthAreasMock = this.growthAreasMock.map((growthArea) => (growthArea.id === id ? {...growthArea, ...growthAreaUpdate,} : growthArea));
+    return this.growthAreasMock;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} area`;
+  remove(id: string) {
+    this.growthAreasMock = this.growthAreasMock.filter((growthArea) => growthArea.id !== id);
+    return this.growthAreasMock;
   }
 }
