@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { Goal } from '../entities';
+import { Goal } from '@flab/api-data';
 import { GoalsService } from './goals.service';
 
 @Controller('goals')

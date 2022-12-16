@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AreasService } from './growth-areas.service';
-import { Area } from "../entities";
+import { GrowthAreasService } from './growth-areas.service';
+import { GrowthArea } from "@flab/api-data";
 
-@Controller('areas')
-export class AreasController {
-  constructor(private readonly areasService: AreasService) {}
+@Controller('growth-areas')
+export class GrowthAreasController {
+  constructor(private readonly areasService: GrowthAreasService) {}
 
   @Post()
-  create(@Body() createAreaDto: Area) {
+  create(@Body() createAreaDto: GrowthArea) {
     return this.areasService.create(createAreaDto);
   }
 
@@ -22,7 +22,7 @@ export class AreasController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAreaDto: Partial<Area>) {
+  update(@Param('id') id: string, @Body() updateAreaDto: Partial<GrowthArea>) {
     return this.areasService.update(+id, updateAreaDto);
   }
 

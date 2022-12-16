@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@flab/api-data": ["libs/api-data/src/index.ts"],
       "@flab/common-ui": ["libs/common-ui/src/index.ts"],
       "@flab/core-data": ["libs/core-data/src/index.ts"],
       "@flab/core-state": ["libs/core-state/src/index.ts"],

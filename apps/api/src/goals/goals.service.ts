@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Goal } from '../entities';
+import { Goal } from '@flab/api-data';
 
 @Injectable()
 export class GoalsService {

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AreasService } from './growth-areas.service';
-import { AreasController } from './growth-areas.controller';
+import { GrowthAreasService } from './growth-areas.service';
+import { GrowthAreasController } from './growth-areas.controller';
 
 @Module({
-  controllers: [AreasController],
-  providers: [AreasService]
+  controllers: [GrowthAreasController],
+  providers: [GrowthAreasService]
 })
 export class AreasModule {}

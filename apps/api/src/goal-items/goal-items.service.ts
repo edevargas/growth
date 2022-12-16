@@ -1,5 +1,5 @@
+import { GoalItem } from '@flab/api-data';
 import { Injectable } from '@nestjs/common';
-import { GoalItem } from '../entities';
 
 @Injectable()
 export class GoalItemsService {

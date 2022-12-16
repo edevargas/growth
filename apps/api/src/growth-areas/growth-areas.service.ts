@@ -1,8 +1,9 @@
+import { GrowthArea } from '@flab/api-data';
 import { Injectable } from '@nestjs/common';
-import { Area } from '../entities'
+
 @Injectable()
-export class AreasService {
-  create(createAreaDto: Area) {
+export class GrowthAreasService {
+  create(createAreaDto: GrowthArea) {
     return 'This action adds a new area';
   }
 
@@ -14,7 +15,7 @@ export class AreasService {
     return `This action returns a #${id} area`;
   }
 
-  update(id: number, updateAreaDto: Partial<Area>) {
+  update(id: number, updateAreaDto: Partial<GrowthArea>) {
     return `This action updates a #${id} area`;
   }
 
