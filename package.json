@@ -7,7 +7,10 @@
     "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "serve:api": "nx run api:serve",
+    "serve:my-growth": "ng serve my-growth --open",
+    "serve:all": "concurrently \"npm run serve:api\" \"npm run serve:my-growth\""
   },
   "private": true,
   "dependencies": {
@@ -49,6 +52,7 @@
     "@types/node": "18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
+    "concurrently": "^7.6.0",
     "cypress": "^11.0.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
