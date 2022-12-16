@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { Goal } from '@flab/api-data';
 import { GoalsService } from './goals.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('goals')
+@ApiTags('goals')
 export class GoalsController {
   constructor(private readonly goalsService: GoalsService) {}
 

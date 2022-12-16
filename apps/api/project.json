@@ -17,6 +17,15 @@
         "tsConfig": "apps/api/tsconfig.app.json",
         "assets": [
           "apps/api/src/assets"
+        ],
+        "tsPlugins": [
+          {
+            "name": "@nestjs/swagger/plugin",
+            "options": {
+              "classValidatorShim": false,
+              "introspectComments": true
+            }
+          }
         ]
       },
       "configurations": {

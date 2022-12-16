@@ -6,4 +6,4 @@ import { GrowthAreasController } from './growth-areas.controller';
   controllers: [GrowthAreasController],
   providers: [GrowthAreasService]
 })
-export class AreasModule {}
+export class GrowthAreasModule {}

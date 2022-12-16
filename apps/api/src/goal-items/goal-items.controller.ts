@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { GoalItem } from '@flab/api-data';
 import { GoalItemsService } from './goal-items.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('goal-items')
+@ApiTags('goal-items')
 export class GoalItemsController {
   constructor(private readonly goalItemsService: GoalItemsService) {}
 
@@ -18,16 +20,16 @@ export class GoalItemsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.goalItemsService.findOne(+id);
+    return this.goalItemsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGoalItemDto: Partial<GoalItem>) {
-    return this.goalItemsService.update(+id, updateGoalItemDto);
+    return this.goalItemsService.update(id, updateGoalItemDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.goalItemsService.remove(+id);
+    return this.goalItemsService.remove(id);
   }
 }

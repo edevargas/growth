@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { GrowthAreasService } from './growth-areas.service';
 import { GrowthArea } from "@flab/api-data";
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('growth-areas')
+@ApiTags('growth-areas')
 export class GrowthAreasController {
   constructor(private readonly areasService: GrowthAreasService) {}
 
@@ -18,16 +20,16 @@ export class GrowthAreasController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.areasService.findOne(+id);
+    return this.areasService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAreaDto: Partial<GrowthArea>) {
-    return this.areasService.update(+id, updateAreaDto);
+    return this.areasService.update(id, updateAreaDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.areasService.remove(+id);
+    return this.areasService.remove(id);
   }
 }

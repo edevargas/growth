@@ -1,5 +1,7 @@
 import { INTERVAL_TYPE } from "../enums/interval-type.enum";
-export interface Goal {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class Goal {
   id: string;
   name: string;
   description: string;
@@ -9,5 +11,6 @@ export interface Goal {
   userId: string;
   growthAreaId: string;
   interval?: number;
+  @ApiProperty({ enum: Object.keys(INTERVAL_TYPE) })
   intervalType?: INTERVAL_TYPE;
 }
