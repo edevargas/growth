@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -13,7 +14,6 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "strictPropertyInitialization": false,
     "paths": {
       "@flab/api-data": ["libs/api-data/src/index.ts"],

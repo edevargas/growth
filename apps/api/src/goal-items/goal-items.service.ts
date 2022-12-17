@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class GoalItemsService {
-  goalItemsMock = apiMocks.goalItemsMock;
+  goalItemsMock = apiMocks.GOAL_ITEMS_MOCK;
 
   create(goalItem: GoalItem) {
     this.goalItemsMock = [...this.goalItemsMock, Object.assign({}, goalItem, { id: uuidv4() })];

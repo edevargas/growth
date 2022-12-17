@@ -1,23 +1,22 @@
-import { TestBed } from '@angular/core/testing';
-
-import { GoalsService } from './goals.service';
-import { HttpClientTestingModule, HttpTestingController,  } from '@angular/common/http/testing';
-import { apiMocks } from '@flab/utils';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Goal } from '@flab/api-data';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { GoalItem } from '@flab/api-data';
+import { apiMocks } from '@flab/utils';
 
-fdescribe('GoalsService', () => {
-  let service: GoalsService;
+import { GoalItemsService } from './goal-items.service';
+
+describe('GoalItemsService', () => {
+  let service: GoalItemsService;
   let httpClientMock: HttpTestingController;
-  const allMocks = apiMocks.GOALS_MOCK;
+  const allMocks = apiMocks.GOAL_ITEMS_MOCK;
   const apiUrl = "http://localhost:3333/api";
-  const model = "goals";
-  const newGoal =  {
-    name: "New Goal",
-    description: "Simple description / New Goal",
-    userId: "u1",
-    progress: 50,
-    growthAreaId: "a1",
+  const model = "goal-items";
+  const newGoalItem = {
+    name: "New Goal Item",
+    description: "Simple description / New Goal item",
+    progress: 5,
+    goalId: "g1",
     dueDate: new Date(2023, 3, 30)
   };
 
@@ -35,11 +34,11 @@ fdescribe('GoalsService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        GoalsService,
+        GoalItemsService,
         {provide: "apiUrl", useValue: apiUrl},
       ]
   });
-    service = TestBed.inject(GoalsService);
+    service = TestBed.inject(GoalItemsService);
     httpClientMock = TestBed.inject(HttpTestingController)
   });
 
@@ -47,7 +46,7 @@ fdescribe('GoalsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it("should retrieve all goals", () => {
+  it("should retrieve all goal itemss", () => {
     service.findAll()
         .subscribe( goals => {
 
@@ -62,12 +61,12 @@ fdescribe('GoalsService', () => {
 
 });
 
-it('should find a goal by id', () => {
+it('should find a goal item by id', () => {
 
   service.findById(allMocks[0].id)
-      .subscribe(goal => {
-          expect(goal).toBeTruthy();
-          expect(goal.id).toBe(allMocks[0].id);
+      .subscribe(goalItem => {
+          expect(goalItem).toBeTruthy();
+          expect(goalItem.id).toBe(allMocks[0].id);
 
       });
 
@@ -79,11 +78,11 @@ it('should find a goal by id', () => {
 
 });
 
-it('should create the goal data', () => {
+it('should create the goal item data', () => {
 
-  service.create(newGoal)
+  service.create(newGoalItem)
       .subscribe(response => {
-        const goal = response as Goal;
+        const goal = response as GoalItem;
         expect(goal.id).toBeTruthy();
 
       });
@@ -93,22 +92,22 @@ it('should create the goal data', () => {
   expect(req.request.method).toEqual("POST");
 
   expect(req.request.body.description)
-      .toEqual(newGoal.description);
+      .toEqual(newGoalItem.description);
 
   req.flush({
-      ...newGoal,
+      ...newGoalItem,
       id: "g1235"
   })
 
 });
 
-it('should update the goal data', () => {
+it('should update the goal item data', () => {
 
-  const changes: Partial<Goal> ={ description: "Description Edited" };
+  const changes: Partial<GoalItem> ={ description: "Description Edited" };
 
   service.update(allMocks[0].id, changes)
       .subscribe(response => {
-        const goal = response as Goal;
+        const goal = response as GoalItem;
         expect(goal.id).toBe(allMocks[0].id);
 
       });
@@ -127,13 +126,13 @@ it('should update the goal data', () => {
 
 });
 
-it('should give an error if save goal fails', () => {
+it('should give an error if save goal item fails', () => {
 
-  const changes: Partial<Goal> ={ description: "Description Edited" };
+  const changes: Partial<GoalItem> ={ description: "Description Edited" };
 
   service.update(allMocks[0].id, changes)
   .subscribe({
-    next: () => fail("the save goal operation should have failed"),
+    next: () => fail("the save goal item operation should have failed"),
     error: (error: HttpErrorResponse) => expect(error.status).toBe(500)
   });
 
@@ -142,7 +141,7 @@ it('should give an error if save goal fails', () => {
   expect(req.request.body.description)
       .toEqual(changes.description);
 
-      req.flush('Save goal failed', {status:500,
+      req.flush('Save goal item failed', {status:500,
         statusText:'Internal Server Error'});
 
 });

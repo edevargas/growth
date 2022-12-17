@@ -1,6 +1,6 @@
 import { Goal } from "@flab/api-data";
 
-export const goalsMock: Goal[] = [
+export const GOALS_MOCK: Goal[] = [
   {
     id: "g1",
     name: "Study Sowftware Architecture",

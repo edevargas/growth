@@ -1,6 +1,6 @@
 import { GrowthArea } from "@flab/api-data";
 
-export const growthAreasMock: GrowthArea[] = [
+export const GROWTH_AREAS_MOCK: GrowthArea[] = [
   {
     id: "a1",
     name: "Education",

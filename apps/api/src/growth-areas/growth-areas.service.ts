@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class GrowthAreasService {
 
-  growthAreasMock = apiMocks.growthAreasMock;
+  growthAreasMock = apiMocks.GROWTH_AREAS_MOCK;
 
   create(growthArea: GrowthArea) {
     this.growthAreasMock = [...this.growthAreasMock, Object.assign({}, growthArea, { id: uuidv4() })];

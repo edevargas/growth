@@ -1,6 +1,6 @@
-import { GoalItem, INTERVAL_TYPE } from "@flab/api-data";
+import { GoalItem, enums } from "@flab/api-data";
 
-export const goalItemsMock: GoalItem[] = [
+export const GOAL_ITEMS_MOCK: GoalItem[] = [
   {
     id: "i1",
     name: "Read DDD",
@@ -25,7 +25,7 @@ export const goalItemsMock: GoalItem[] = [
     goalId: "g3",
     dueDate: new Date(2023, 3, 30),
     interval: 1,
-    intervalType: INTERVAL_TYPE.weekly
+    intervalType: enums.INTERVAL_TYPE.weekly
   },
   {
     id: "i3",
@@ -35,7 +35,7 @@ export const goalItemsMock: GoalItem[] = [
     goalId: "g3",
     dueDate: new Date(2023, 3, 30),
     interval: 1,
-    intervalType: INTERVAL_TYPE.weekly
+    intervalType: enums.INTERVAL_TYPE.weekly
   },
   {
     id: "i4",
@@ -45,7 +45,7 @@ export const goalItemsMock: GoalItem[] = [
     goalId: "g3",
     dueDate: new Date(2023, 3, 30),
     interval: 1,
-    intervalType: INTERVAL_TYPE.weekly
+    intervalType: enums.INTERVAL_TYPE.weekly
   },
   {
     id: "i5",
@@ -55,7 +55,7 @@ export const goalItemsMock: GoalItem[] = [
     goalId: "g2",
     dueDate: new Date(2023, 11, 30),
     interval: 2,
-    intervalType: INTERVAL_TYPE.weekly
+    intervalType: enums.INTERVAL_TYPE.weekly
   },
   {
     id: "i6",
@@ -65,6 +65,6 @@ export const goalItemsMock: GoalItem[] = [
     goalId: "g2",
     dueDate: new Date(2023, 11, 30),
     interval: 2,
-    intervalType: INTERVAL_TYPE.weekly
+    intervalType: enums.INTERVAL_TYPE.weekly
   },
 ]

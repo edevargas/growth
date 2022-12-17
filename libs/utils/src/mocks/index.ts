@@ -1,3 +1,3 @@
-export { goalItemsMock } from "./goal-items-mock"
-export { goalsMock } from "./goals-mock"
-export { growthAreasMock } from "./growth-areas-mock"
+export * from "./goal-items-mock"
+export * from "./goals-mock"
+export * from "./growth-areas-mock"

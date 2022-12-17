@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class GoalsService {
 
-  goalsMock = apiMocks.goalsMock;
+  goalsMock = apiMocks.GOALS_MOCK;
 
   create(goal: Goal) {
     this.goalsMock = [...this.goalsMock, Object.assign({}, goal, { id: uuidv4() })];
