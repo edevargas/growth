@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { GrowthArea as GrowthAreaApi } from '@flab/api-data';
 import { GrowthArea } from '../../models/growth-area';
 
 @Injectable({
@@ -12,11 +13,11 @@ export class GrowthAreasService {
   constructor(private http: HttpClient, @Inject("apiUrl") private apiUrl: string) {}
 
   findAll() {
-    return this.http.get<GrowthArea[]>(this.getUrl());
+    return this.http.get<GrowthAreaApi[]>(this.getUrl());
   }
 
   findById(id: string) {
-    return this.http.get<GrowthArea>(this.getUrlWithId(id));
+    return this.http.get<GrowthAreaApi>(this.getUrlWithId(id));
   }
 
   create(growthArea: Partial<GrowthArea>) {

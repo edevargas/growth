@@ -21,6 +21,10 @@ export class GoalsService {
     return this.goalsMock.find((goal) => goal.id === id);
   }
 
+  findByUserId(userId: string) {
+    return this.goalsMock.filter((goal) => goal.userId === userId);
+  }
+
   update(id: string, goalUpdate: Partial<Goal>) {
     this.goalsMock = this.goalsMock.map((goal) => (goal.id === id ? {...goal, ...goalUpdate,} : goal));
     return this.goalsMock;

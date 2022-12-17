@@ -78,6 +78,26 @@ it('should find a goal item by id', () => {
 
 });
 
+it('should find a goal item by goal Id', () => {
+  const goalId = "g1";
+  service.findByGoalId(goalId)
+      .subscribe(goalItems => {
+          expect(goalItems).toBeTruthy();
+          const goalItemsByGoalId = allMocks.filter( g => g.goalId === goalId);
+          expect(goalItems.length).toBe(goalItemsByGoalId.length);
+          const userGoalIdx = goalItemsByGoalId.findIndex(g => g.id === goalItems[0].id);
+          expect(goalItems[0].name).toBe(goalItemsByGoalId[userGoalIdx].name);
+
+      });
+
+  const req = httpClientMock.expectOne(`${getUrl()}/goal/${goalId}`);
+
+  expect(req.request.method).toEqual("GET");
+
+  req.flush(allMocks.filter( gi => gi.goalId === goalId));
+
+});
+
 it('should create the goal item data', () => {
 
   service.create(newGoalItem)

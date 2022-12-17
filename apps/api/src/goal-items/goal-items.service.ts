@@ -19,6 +19,10 @@ export class GoalItemsService {
     return this.goalItemsMock.find((goalItem) => goalItem.id === id);
   }
 
+  findByGoalId(goalId: string) {
+    return this.goalItemsMock.filter((goalItem) => goalItem.goalId === goalId);
+  }
+
   update(id: string, goalItemUpdate: Partial<GoalItem>) {
     this.goalItemsMock = this.goalItemsMock.map((goalItem) => (goalItem.id === id ? {...goalItem, ...goalItemUpdate,} : goalItem));
     return this.goalItemsMock;

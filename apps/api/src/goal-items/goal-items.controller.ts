@@ -23,6 +23,12 @@ export class GoalItemsController {
     return this.goalItemsService.findOne(id);
   }
 
+  @Get('goal/:goalId')
+  findByUserId(@Param('goalId') id: string) {
+    return this.goalItemsService.findByGoalId(id);
+  }
+
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGoalItemDto: Partial<GoalItem>) {
     return this.goalItemsService.update(id, updateGoalItemDto);

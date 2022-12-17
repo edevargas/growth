@@ -79,6 +79,25 @@ it('should find a goal by id', () => {
 
 });
 
+it('should find a goal by userId', () => {
+  const userId = "u1";
+  service.findByUserId(userId)
+      .subscribe(goals => {
+          expect(goals).toBeTruthy();
+          const userGoals = allMocks.filter( g => g.userId === userId);
+          expect(goals.length).toBe(userGoals.length);
+          const userGoalIdx = userGoals.findIndex(g => g.id === goals[0].id);
+          expect(goals[0].name).toBe(userGoals[userGoalIdx].name);
+      });
+
+  const req = httpClientMock.expectOne(`${getUrl()}/user/${userId}`);
+
+  expect(req.request.method).toEqual("GET");
+
+  req.flush(allMocks.filter(g => g.userId === userId));
+
+});
+
 it('should create the goal data', () => {
 
   service.create(newGoal)

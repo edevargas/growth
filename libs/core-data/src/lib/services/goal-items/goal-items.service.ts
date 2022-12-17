@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { GoalItem } from '../../models/goal-item';
+import { GoalItem } from '@flab/api-data';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,11 @@ export class GoalItemsService {
   findById(id: string) {
     return this.http.get<GoalItem>(this.getUrlWithId(id));
   }
+
+  findByGoalId(goalId: string) {
+    return this.http.get<GoalItem[]>(`${this.getUrl()}/goal/${goalId}`);
+  }
+
 
   create(goalItem: Partial<GoalItem>) {
     return this.http.post(this.getUrl(), goalItem);
