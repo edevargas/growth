@@ -12,6 +12,12 @@ export const selectGoalsLoaded = createSelector(
   (state: GoalsState) => state.loaded
 );
 
+export const selectGoalsLoading = createSelector(
+  selectGoalsState,
+  (state: GoalsState) => state.loading
+);
+
+
 export const selectGoalsError = createSelector(
   selectGoalsState,
   (state: GoalsState) => state.error
@@ -32,7 +38,7 @@ export const selectSelectedId = createSelector(
   (state: GoalsState) => state.selectedId
 );
 
-export const selectEntity = createSelector(
+export const selectSelectedEntity = createSelector(
   selectGoalsEntities,
   selectSelectedId,
   (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)

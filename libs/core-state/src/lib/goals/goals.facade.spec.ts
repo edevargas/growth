@@ -7,7 +7,7 @@ import { readFirst } from '@nrwl/angular/testing';
 import * as GoalsActions from './goals.actions';
 import { GoalsEffects } from './goals.effects';
 import { GoalsFacade } from './goals.facade';
-import { GoalsEntity } from './goals.models';
+
 import {
   GOALS_FEATURE_KEY,
   GoalsState,
