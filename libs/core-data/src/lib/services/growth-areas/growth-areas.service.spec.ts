@@ -8,7 +8,7 @@ import { GrowthAreasService } from './growth-areas.service';
 describe('GrowthAreasService', () => {
   let service: GrowthAreasService;
   let httpClientMock: HttpTestingController;
-  const allMocks = apiMocks.GROWTH_AREAS_MOCK;
+  const allMocks = Object.values(apiMocks.GROWTH_AREAS_MOCK);
   const apiUrl = "http://localhost:3333/api";
   const model = "growth-areas";
   const newGrowthArea = {
@@ -43,28 +43,28 @@ describe('GrowthAreasService', () => {
     expect(service).toBeTruthy();
   });
 
-  it("should retrieve all Growth Areas", () => {
+  it("should retrieve all Growth Areas", done => {
     service.findAll()
         .subscribe( growthAreas => {
-
             expect(growthAreas).toBeTruthy();
             expect(growthAreas.length).toBe(allMocks.length);
             const firstGrowArea = growthAreas.find(growthArea => growthArea.id === allMocks[0].id )
-            expect(firstGrowArea?.name).toBe(allMocks[0].name)
+            expect(firstGrowArea?.name).toBe(allMocks[0].name);
+            done();
         })
     const req = httpClientMock.expectOne(getUrl());
-    req.flush({ payload: Object.values(allMocks)}); //Only when flush is called the Http Client will simulate data
+    req.flush(allMocks); //Only when flush is called the Http Client will simulate data
     expect(req.request.method).toEqual("GET");
 
 });
 
-it('should find a Growth Area by id', () => {
+it('should find a Growth Area by id', done => {
 
   service.findById(allMocks[0].id)
       .subscribe(growthArea => {
           expect(growthArea).toBeTruthy();
           expect(growthArea.id).toBe(allMocks[0].id);
-
+          done();
       });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));
@@ -75,13 +75,13 @@ it('should find a Growth Area by id', () => {
 
 });
 
-it('should create the Growth Area data', () => {
+it('should create the Growth Area data', done => {
 
   service.create(newGrowthArea)
       .subscribe(response => {
         const growthArea = response as GrowthArea;
         expect(growthArea.id).toBeTruthy();
-
+        done();
       });
 
   const req = httpClientMock.expectOne(getUrl());
@@ -98,7 +98,7 @@ it('should create the Growth Area data', () => {
 
 });
 
-it('should update the growthArea item data', () => {
+it('should update the growthArea item data', done => {
 
   const changes: Partial<GrowthArea> ={ description: "Description Edited" };
 
@@ -106,7 +106,7 @@ it('should update the growthArea item data', () => {
       .subscribe(response => {
         const growthArea = response as GrowthArea;
         expect(growthArea.id).toBe(allMocks[0].id);
-
+        done();
       });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));
@@ -123,14 +123,17 @@ it('should update the growthArea item data', () => {
 
 });
 
-it('should give an error if save Growth Area fails', () => {
+it('should give an error if save Growth Area fails', done => {
 
   const changes: Partial<GrowthArea> ={ description: "Description Edited" };
 
   service.update(allMocks[0].id, changes)
   .subscribe({
     next: () => fail("the save growthArea operation should have failed"),
-    error: (error: HttpErrorResponse) => expect(error.status).toBe(500)
+    error: (error: HttpErrorResponse) => {
+      expect(error.status).toBe(500);
+      done();
+    }
   });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));

@@ -21,7 +21,7 @@
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
+    "strictMetadataEmit": false,
     "fullTemplateTypeCheck": true,
     "enableResourceInlining": true,
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Goal } from '@flab/api-data';
+import { filter, map, tap } from 'rxjs';
+import { mapGoalFromApiToLocalGoal } from '../../mappers';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +14,30 @@ export class GoalsService {
   constructor(private http: HttpClient, @Inject("apiUrl") private apiUrl: string) {}
 
   findAll() {
-    return this.http.get<Goal[]>(this.getUrl());
+    return this.http.get<Goal[]>(this.getUrl())
+      .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));
   }
 
   findById(id: string) {
-    return this.http.get<Goal>(this.getUrlWithId(id));
+    return this.http.get<Goal>(this.getUrlWithId(id))
+    .pipe(map( goal => mapGoalFromApiToLocalGoal(goal)));
   }
 
-  findByUserId(userId: string) {
-    return this.http.get<Goal[]>(`${this.getUrl()}/user/${userId}`);
+  findAllByUserId(userId: string) {
+    return this.http.get<Goal[]>(`${this.getUrl()}/user/${userId}`)
+    .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));;
+  }
+
+  findFirstClassGoalsByUserId(userId: string) {
+    return this.http.get<Goal[]>(`${this.getUrl()}/user/${userId}/first-class`)
+    .pipe(
+      filter( goals => goals && goals.length > 0),
+      map( goals =>  goals.map(mapGoalFromApiToLocalGoal)));
+  }
+
+  findGoalChildren(goalId: string) {
+    return this.http.get<Goal[]>(`${this.getUrlWithId(goalId)}/children`)
+    .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));
   }
 
   create(goal: Partial<Goal>) {

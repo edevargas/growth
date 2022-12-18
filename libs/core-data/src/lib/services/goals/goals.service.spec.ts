@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GoalsService } from './goals.service';
-import { HttpClientTestingModule, HttpTestingController,  } from '@angular/common/http/testing';
-import { apiMocks } from '@flab/utils';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Goal } from '@flab/api-data';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { enums, Goal } from '@flab/api-data';
+import { apiMocks } from '@flab/utils';
+import { GoalsService } from './goals.service';
 
 fdescribe('GoalsService', () => {
   let service: GoalsService;
   let httpClientMock: HttpTestingController;
-  const allMocks = apiMocks.GOALS_MOCK;
+  const allMocks = Object.values(apiMocks.GOALS_MOCK);
   const apiUrl = "http://localhost:3333/api";
   const model = "goals";
   const newGoal =  {
@@ -18,7 +18,8 @@ fdescribe('GoalsService', () => {
     userId: "u1",
     progress: 50,
     growthAreaId: "a1",
-    dueDate: new Date(2023, 3, 30)
+    dueDate: new Date(2023, 3, 30),
+    state: enums.GOAL_STATE.ready
   };
 
   function getUrl() {
@@ -40,35 +41,36 @@ fdescribe('GoalsService', () => {
       ]
   });
     service = TestBed.inject(GoalsService);
-    httpClientMock = TestBed.inject(HttpTestingController)
+    httpClientMock = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(GoalsService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it("should retrieve all goals", () => {
+  it("should retrieve all goals", done => {
     service.findAll()
         .subscribe( goals => {
-
             expect(goals).toBeTruthy();
             expect(goals.length).toBe(allMocks.length);
-            const firstGoal = goals.find(goal => goal.id === allMocks[0].id )
-            expect(firstGoal?.name).toBe(allMocks[0].name)
+            const firstGoalIdx = goals.findIndex(goal => goal.id === allMocks[0].id )
+            expect(goals[firstGoalIdx]?.name).toBe(allMocks[0].name);
+            done();
         })
     const req = httpClientMock.expectOne(getUrl());
-    req.flush({ payload: Object.values(apiMocks.GOALS_MOCK)}); //Only when flush is called the Http Client will simulate data
+    req.flush(allMocks); //Only when flush is called the Http Client will simulate data
     expect(req.request.method).toEqual("GET");
 
 });
 
-it('should find a goal by id', () => {
+it('should find a goal by id', done => {
 
   service.findById(allMocks[0].id)
       .subscribe(goal => {
           expect(goal).toBeTruthy();
           expect(goal.id).toBe(allMocks[0].id);
-
+          done();
       });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));
@@ -79,15 +81,37 @@ it('should find a goal by id', () => {
 
 });
 
-it('should find a goal by userId', () => {
+test('should find First Class Goals by userId', done => {
   const userId = "u1";
-  service.findByUserId(userId)
+
+  service.findFirstClassGoalsByUserId(userId)
+      .subscribe(goals => {
+          expect(goals).toBeTruthy();
+          const userGoals = allMocks.filter( g => g.userId === userId && !g.goalParentId);
+          expect(goals.length).toBe(userGoals.length);
+          const userGoalIdx = userGoals.findIndex(g => g.id === goals[0].id);
+          expect(goals[0].name).toBe(userGoals[userGoalIdx].name);
+          done();
+      });
+
+  const req = httpClientMock.expectOne(`${getUrl()}/user/${userId}/first-class`);
+
+  expect(req.request.method).toEqual("GET");
+
+  req.flush(allMocks.filter(g => g.userId === userId && !g.goalParentId));
+
+}, 1500);
+
+it('should find a goal by userId', done => {
+  const userId = "u1";
+  service.findAllByUserId(userId)
       .subscribe(goals => {
           expect(goals).toBeTruthy();
           const userGoals = allMocks.filter( g => g.userId === userId);
           expect(goals.length).toBe(userGoals.length);
           const userGoalIdx = userGoals.findIndex(g => g.id === goals[0].id);
           expect(goals[0].name).toBe(userGoals[userGoalIdx].name);
+          done();
       });
 
   const req = httpClientMock.expectOne(`${getUrl()}/user/${userId}`);
@@ -98,13 +122,13 @@ it('should find a goal by userId', () => {
 
 });
 
-it('should create the goal data', () => {
+it('should create the goal data', done => {
 
   service.create(newGoal)
       .subscribe(response => {
         const goal = response as Goal;
         expect(goal.id).toBeTruthy();
-
+        done();
       });
 
   const req = httpClientMock.expectOne(getUrl());
@@ -121,7 +145,7 @@ it('should create the goal data', () => {
 
 });
 
-it('should update the goal data', () => {
+it('should update the goal data', done => {
 
   const changes: Partial<Goal> ={ description: "Description Edited" };
 
@@ -129,7 +153,7 @@ it('should update the goal data', () => {
       .subscribe(response => {
         const goal = response as Goal;
         expect(goal.id).toBe(allMocks[0].id);
-
+        done()
       });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));
@@ -146,14 +170,17 @@ it('should update the goal data', () => {
 
 });
 
-it('should give an error if save goal fails', () => {
+it('should give an error if save goal fails', done => {
 
   const changes: Partial<Goal> ={ description: "Description Edited" };
 
   service.update(allMocks[0].id, changes)
   .subscribe({
     next: () => fail("the save goal operation should have failed"),
-    error: (error: HttpErrorResponse) => expect(error.status).toBe(500)
+    error: (error: HttpErrorResponse) => {
+      expect(error.status).toBe(500)
+      done();
+    }
   });
 
   const req = httpClientMock.expectOne(getUrlWithId(allMocks[0].id));

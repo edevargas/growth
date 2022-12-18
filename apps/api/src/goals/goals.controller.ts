@@ -25,7 +25,17 @@ export class GoalsController {
 
   @Get('user/:userId')
   findByUserId(@Param('userId') id: string) {
-    return this.goalsService.findByUserId(id);
+    return this.goalsService.findAllByUserId(id);
+  }
+
+  @Get('user/:userId/first-class')
+  findFirstClassByUserId(@Param('userId') userId: string) {
+    return this.goalsService.findFirstClassByUserId(userId);
+  }
+
+  @Get(':id/children')
+  findGoalChildren(@Param('id') id: string) {
+    return this.goalsService.findGoalChildren(id);
   }
 
   @Patch(':id')

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Goal } from '@flab/api-data';
+import { enums, Goal } from '@flab/api-data';
 import { apiMocks } from '@flab/utils';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GoalsService {
 
-  goalsMock = apiMocks.GOALS_MOCK;
+  goalsMock = Object.values(apiMocks.GOALS_MOCK);
 
   create(goal: Goal) {
     this.goalsMock = [...this.goalsMock, Object.assign({}, goal, { id: uuidv4() })];
@@ -21,8 +21,28 @@ export class GoalsService {
     return this.goalsMock.find((goal) => goal.id === id);
   }
 
-  findByUserId(userId: string) {
+  findAllByUserId(userId: string) {
     return this.goalsMock.filter((goal) => goal.userId === userId);
+  }
+
+  findFirstClassByUserId(userId: string) {
+    return this.goalsMock.filter((goal) => goal.userId === userId && !goal.goalParentId);
+  }
+
+  findGoalChildren(goalId: string) {
+    return this.goalsMock.filter((goal) => goal.goalParentId === goalId);
+  }
+
+  findAllByState(userId: string, state: enums.GOAL_STATE) {
+    return this.goalsMock.filter((goal) => goal.state === state && goal.userId === userId);
+  }
+
+  findFirstClassByState(userId: string, state: enums.GOAL_STATE) {
+    return this.goalsMock.filter((goal) => goal.state === state && !goal.goalParentId && goal.userId === userId);
+  }
+
+  findGoalChildrenByState(userId: string, state: enums.GOAL_STATE) {
+    return this.goalsMock.filter((goal) => goal.state === state && goal.goalParentId && goal.userId === userId);
   }
 
   update(id: string, goalUpdate: Partial<Goal>) {

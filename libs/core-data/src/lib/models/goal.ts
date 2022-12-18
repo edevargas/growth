@@ -1,3 +1,5 @@
+import { enums } from "@flab/api-data";
+
 export class Goal {
   id: string;
   name: string;
@@ -8,5 +10,8 @@ export class Goal {
   userId: string;
   growthAreaId: string;
   interval?: number;
-  intervalType?: INTERVAL_TYPE;
+  intervalType?: enums.INTERVAL_TYPE;
+  goalParentId?: string;
+  state: enums.GOAL_STATE;
+
 }
