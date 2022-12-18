@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { GrowthAreasService } from './growth-areas.service';
 import { GrowthArea } from "@flab/api-data";
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { GrowthAreasService } from './growth-areas.service';
 
 @Controller('growth-areas')
 @ApiTags('growth-areas')
@@ -23,7 +23,7 @@ export class GrowthAreasController {
     return this.areasService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateAreaDto: Partial<GrowthArea>) {
     return this.areasService.update(id, updateAreaDto);
   }

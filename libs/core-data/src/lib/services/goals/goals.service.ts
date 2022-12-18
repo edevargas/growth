@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Goal } from '@flab/api-data';
-import { filter, map, tap } from 'rxjs';
-import { mapGoalFromApiToLocalGoal } from '../../mappers';
+import { Goal as GoalApi } from '@flab/api-data';
+import { map } from 'rxjs';
+import { mapGoalFromApiToLocalGoal } from '../../mappers/goals.mapper';
+import { Goal } from '../../models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,42 +15,46 @@ export class GoalsService {
   constructor(private http: HttpClient, @Inject("apiUrl") private apiUrl: string) {}
 
   findAll() {
-    return this.http.get<Goal[]>(this.getUrl())
-      .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));
+    return this.http.get<GoalApi[]>(this.getUrl())
+      .pipe(map(this.maptoLocalGoalsArray));
   }
 
   findById(id: string) {
-    return this.http.get<Goal>(this.getUrlWithId(id))
-    .pipe(map( goal => mapGoalFromApiToLocalGoal(goal)));
+    return this.http.get<GoalApi>(this.getUrlWithId(id))
+    .pipe(map(mapGoalFromApiToLocalGoal));
   }
 
   findAllByUserId(userId: string) {
-    return this.http.get<Goal[]>(`${this.getUrl()}/user/${userId}`)
-    .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));;
+    return this.http.get<GoalApi[]>(`${this.getUrl()}/user/${userId}`)
+    .pipe(map(this.maptoLocalGoalsArray));
   }
 
   findFirstClassGoalsByUserId(userId: string) {
-    return this.http.get<Goal[]>(`${this.getUrl()}/user/${userId}/first-class`)
-    .pipe(
-      filter( goals => goals && goals.length > 0),
-      map( goals =>  goals.map(mapGoalFromApiToLocalGoal)));
+    return this.http.get<GoalApi[]>(`${this.getUrl()}/user/${userId}/first-class`)
+    .pipe(map(this.maptoLocalGoalsArray));
   }
 
   findGoalChildren(goalId: string) {
-    return this.http.get<Goal[]>(`${this.getUrlWithId(goalId)}/children`)
-    .pipe(map( goals => goals.map(mapGoalFromApiToLocalGoal)));
+    return this.http.get<GoalApi[]>(`${this.getUrlWithId(goalId)}/children`)
+    .pipe(map(this.maptoLocalGoalsArray));
   }
 
   create(goal: Partial<Goal>) {
-    return this.http.post(this.getUrl(), goal);
+    return this.http.post<GoalApi>(this.getUrl(), goal)
+    .pipe(map(mapGoalFromApiToLocalGoal));
   }
 
   update(goalId: string, goal: Partial<Goal>) {
-    return this.http.put(this.getUrlWithId(goalId), goal);
+    return this.http.put<GoalApi>(this.getUrlWithId(goalId), goal)
+    .pipe(map(mapGoalFromApiToLocalGoal));
   }
 
   delete(goalId: string) {
     return this.http.delete(this.getUrlWithId(goalId));
+  }
+
+  maptoLocalGoalsArray(goals: GoalApi[]) {
+    return goals.map(mapGoalFromApiToLocalGoal);
   }
 
   private getUrl() {

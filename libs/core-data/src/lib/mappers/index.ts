@@ -1,1 +1,1 @@
-export { mapGoalFromApiToLocalGoal } from "./goalApiMapper";
+export * as goalsMapper from "./goalsMapper";

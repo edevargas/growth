@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { Goal } from '@flab/api-data';
-import { GoalsService } from './goals.service';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { GoalsService } from './goals.service';
 
 @Controller('goals')
 @ApiTags('goals')
@@ -38,7 +38,7 @@ export class GoalsController {
     return this.goalsService.findGoalChildren(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateGoalDto: Partial<Goal>) {
     return this.goalsService.update(id, updateGoalDto);
   }

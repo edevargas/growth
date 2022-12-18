@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { enums, Goal } from '@flab/api-data';
+import { enums } from '@flab/api-data';
 import { apiMocks } from '@flab/utils';
 import { GoalsService } from './goals.service';
+import { Goal } from '../../models';
 
 fdescribe('GoalsService', () => {
   let service: GoalsService;
@@ -81,7 +82,7 @@ it('should find a goal by id', done => {
 
 });
 
-test('should find First Class Goals by userId', done => {
+it('should find First Class Goals by userId', done => {
   const userId = "u1";
 
   service.findFirstClassGoalsByUserId(userId)
