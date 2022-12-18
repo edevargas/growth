@@ -1,1 +1,2 @@
-export * as goalsMapper from "./goalsMapper";
+export * as goalsMapper from "./goals.mapper";
+export * as growthAreasMapper from "./growth-areas.mapper";
