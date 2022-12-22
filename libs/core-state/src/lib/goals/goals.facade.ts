@@ -12,7 +12,7 @@ export class GoalsFacade {
   loaded$ = this.store.pipe(select(GoalsSelectors.selectGoalsLoaded));
   loading$ = this.store.pipe(select(GoalsSelectors.selectGoalsLoading));
   allGoals$ = this.store.pipe(select(GoalsSelectors.selectAllGoals));
-  selectedGoals$ = this.store.pipe(select(GoalsSelectors.selectSelectedEntity));
+  selectedGoal$ = this.store.pipe(select(GoalsSelectors.selectSelectedEntity));
 
   selectGoal(goalId: string) {
     this.dispatch(GoalsActions.select({ id: goalId }));

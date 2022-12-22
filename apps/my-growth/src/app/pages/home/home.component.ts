@@ -13,9 +13,14 @@ export class HomeComponent implements OnInit {
   goalsFacade = inject(GoalsFacade);
 
   goals$ = this.goalsFacade.allGoals$;
+  selectedGoal$ = this.goalsFacade.selectedGoal$;
 
   ngOnInit(): void {
-    this.goalsFacade.findAllByUserId("u1");
+    this.goalsFacade.findFirstClassGoalsByUserId("u1");
+  }
+
+  selectGoal(id: string) {
+    this.goalsFacade.selectGoal(id);
   }
 
 
