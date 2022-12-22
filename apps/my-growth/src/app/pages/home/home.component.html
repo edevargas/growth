@@ -1,1 +1,3 @@
-<p>home works!</p>
+<ng-container *ngIf="(goals$ | async) || [] as goals" >
+  <p *ngFor="let goal of goals"> {{goal.name}} </p>
+</ng-container>

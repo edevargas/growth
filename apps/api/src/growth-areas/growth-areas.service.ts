@@ -1,5 +1,5 @@
 import { GrowthArea } from '@flab/api-data';
-import { apiMocks } from '@flab/utils';
+import { apiMocks } from '@flab/testing-utils/mocks';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 @Injectable()

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +7,6 @@ import { Inject, Injectable } from "@angular/core";
 export class NotifiersUtilService {
 
   DEFAULT_ERROR_MESSAGE = "Sorry, something went wrong";
-
-  constructor(@Inject('timeoutNotifiers') private timeoutNotifiers: number) { }
 
   handleError(e: any) {
     console.log({error: e});

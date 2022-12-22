@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { enums, Goal } from '@flab/api-data';
-import { apiMocks } from '@flab/utils';
 import { v4 as uuidv4 } from 'uuid';
+import { apiMocks } from '@flab/testing-utils/mocks';
 
 @Injectable()
 export class GoalsService {

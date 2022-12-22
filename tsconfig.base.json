@@ -20,6 +20,7 @@
       "@flab/common-ui": ["libs/common-ui/src/index.ts"],
       "@flab/core-data": ["libs/core-data/src/index.ts"],
       "@flab/core-state": ["libs/core-state/src/index.ts"],
+      "@fedd/core-state/*": ["libs/core-state/src/lib/*"],
       "@flab/testing-utils/cypress-commands": [
         "libs/testing-utils/cypress-commands/src/index.ts"
       ],

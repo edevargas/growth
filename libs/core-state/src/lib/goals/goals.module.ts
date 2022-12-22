@@ -8,7 +8,7 @@ import { GoalsFacade } from './goals.facade';
 @NgModule({
   imports: [
     StoreModule.forFeature(fromGoals.GOALS_FEATURE_KEY, fromGoals.goalsReducer),
-    EffectsModule.forFeature([GoalsEffects]),
+    EffectsModule.forFeature([GoalsEffects])
   ],
   providers: [GoalsFacade],
 })

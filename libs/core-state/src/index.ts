@@ -1,1 +1,1 @@
-export * from './lib/core-state.module';
+export * from './lib/my-growth-state.module';
