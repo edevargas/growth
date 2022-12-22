@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { apiMocks } from '@flab/utils';
+import { apiMocks } from '@flab/testing-utils/mocks';
 import { GrowthArea } from '../../models';
 import { GrowthAreasService } from './growth-areas.service';
 

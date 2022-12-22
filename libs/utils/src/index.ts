@@ -1,2 +1,1 @@
-export * as apiMocks from "./lib/mocks";
-export * from "./lib/notifiers";
+export * from "./lib/notifiers/notifiers.service";

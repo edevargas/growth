@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { enums } from '@flab/api-data';
-import { apiMocks } from '@flab/utils';
 import { GoalsService } from './goals.service';
 import { Goal } from '../../models';
+import { apiMocks } from '@flab/testing-utils/mocks';
 
 fdescribe('GoalsService', () => {
   let service: GoalsService;

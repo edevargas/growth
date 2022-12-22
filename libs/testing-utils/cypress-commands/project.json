@@ -1,0 +1,26 @@
+{
+  "name": "testing-utils-cypress-commands",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/testing-utils/cypress-commands/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/testing-utils/cypress-commands",
+        "main": "libs/testing-utils/cypress-commands/src/index.ts",
+        "tsConfig": "libs/testing-utils/cypress-commands/tsconfig.lib.json",
+        "assets": ["libs/testing-utils/cypress-commands/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/testing-utils/cypress-commands/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
