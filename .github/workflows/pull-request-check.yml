@@ -40,7 +40,8 @@ jobs:
       run: npm ci
 
     - name: Run api
-      run: npm run serve:api
+      run: npm run serve:api # add time out
+      timeout-minutes: 2
       env:
         NODE_ENV: development
 
