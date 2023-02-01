@@ -30,8 +30,11 @@ jobs:
       with:
         node-version: 18
 
-    - name: Install Nx dependencies
+    - name: Install nrwl CLI dependencies
       run: npm install -g @nrwl/cli
+
+    - name: Install Nx dependencies
+      run: npm install nx
 
     - name: Install dependencies
       run: npm ci
