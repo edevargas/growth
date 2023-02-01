@@ -44,9 +44,6 @@ jobs:
       env:
         NODE_ENV: development
 
-    - name: Run api
-      run: npm run serve:api
-
     - name: Run Cypress
       run: npm nx e2e my-growth-e2e
 
