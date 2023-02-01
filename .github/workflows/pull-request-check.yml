@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: cypress-io/github-action@v4
     - name: Checkout code
       uses: actions/checkout@v3
 
@@ -52,7 +53,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run Cypress # setup path to cypress videos using environment CYPRESS_CACHE_FOLDER
+    - name: Run Cypress
       run: npx nx serve my-growth-e2e:e2e
       env:
         TERM: ${{ env.TERM }}
@@ -63,4 +64,4 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: cypress-videos
-        path: cypress/videos
+        path: cypress/downloads
