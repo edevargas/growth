@@ -39,17 +39,10 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Checkout code
-      uses: actions/checkout@v3
-
     - name: Run api
       run: npm run serve:api
       env:
         NODE_ENV: development
-
-
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Run api
       run: npm run serve:api
