@@ -40,7 +40,7 @@ jobs:
       run: npm ci
 
     - name: Run Cypress
-      run: npm nx e2e my-growth-e2e
+      run: npx nx e2e my-growth-e2e
 
     - name: Download the error videos
       uses: actions/download-artifact@v1
