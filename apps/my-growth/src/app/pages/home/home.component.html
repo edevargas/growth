@@ -1,13 +1,19 @@
+<header>
+  <h1>My Goals</h1>
+</header>
 <ng-container *ngIf="(goals$ | async) || [] as goals" >
   <section class="home-container">
-    <div class="goals-list-container">
-      <div class="goal-item" *ngFor="let goal of goals" (click)="selectGoal(goal.id)">
+    <div class="goals-list-container" data-testid="goal-list-container">
+      <div *ngFor="let goal of goals"
+        class="goal-item"
+        (click)="selectGoal(goal.id)"
+        data-testid="goal-item" >
           <p>{{goal.name}}</p>
       </div>
     </div>
 
     <ng-container  *ngIf="(selectedGoal$ | async) as selectedGoal">
-      <div class="goal-info">
+      <div class="goal-info" data-testid="goal-info">
         <h2>Goal Info</h2>
         <p>{{selectedGoal.description}}</p>
       </div>
