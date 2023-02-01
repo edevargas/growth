@@ -11,6 +11,9 @@ on:
   push:
     branches:
       - develop
+env:
+  TERM: xterm-256color
+
 jobs:
   log:
     runs-on: ubuntu-latest
