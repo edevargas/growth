@@ -14,6 +14,7 @@ on:
 env:
   TERM: xterm-256color
   CYPRESS_download_on_fail: true
+  NODE_VERSION: 18
 
 jobs:
   log:
@@ -29,18 +30,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Cache node modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-
 
     - name: Install nrwl CLI dependencies
       run: npm install -g @nrwl/cli
@@ -51,8 +52,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run Cypress
-      run: npx nx serve my-growth-e2e:e2e --headless --watch=false
+    - name: Run Cypress # setup path to cypress videos using environment CYPRESS_CACHE_FOLDER
+      run: npx nx serve my-growth-e2e:e2e
       env:
         TERM: ${{ env.TERM }}
         CYPRESS_download_on_fail: ${{ env.CYPRESS_download_on_fail }}
