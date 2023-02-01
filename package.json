@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "nx",
+    "ng": "npx nx",
     "postinstall": "node ./decorate-angular-cli.js",
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test",
-    "serve:api": "nx run api:serve",
+    "start": "npx nx serve",
+    "build": "npx nx build",
+    "test": "npx nx test",
+    "serve:api": "npx nx run api:serve",
     "serve:my-growth": "ng serve my-growth --open",
     "serve:all": "concurrently \"npm run serve:api\" \"npm run serve:my-growth\""
   },
