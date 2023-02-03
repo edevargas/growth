@@ -1,0 +1,88 @@
+name: Update Epic Subtask
+on:
+  issues:
+    types: [edited, labeled]
+jobs:
+  handle-epics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if ACTION_TOKEN exists
+        run: |
+          if [ -z "${{ secrets.ACTION_TOKEN }}" ]; then
+            echo "ACTION_TOKEN does not exist"
+            exit 1
+          fi
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Check is has Epic label
+        id: check-epic-label
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.ACTION_TOKEN}}
+          script: |
+            const label = context.payload.issue.labels.find(label => label.name === 'Epic')
+            if (label) {
+              return true
+            }
+            return false
+
+      - name: Get issue number
+        if: steps.check-epic-label.outputs.result == 'true'
+        id: get-epic-issue-number
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.ACTION_TOKEN}}
+          script: |
+            const issueNumber = context.payload.issue.number
+            return issueNumber
+
+      - name: Log issue number
+        if: steps.check-epic-label.outputs.result == 'true'
+        run: |
+          echo "The Epic Issue number is: ${{steps.get-epic-issue-number.outputs.result}}"
+
+
+      - name: Get issues mentioned in body
+        if: steps.check-epic-label.outputs.result == 'true'
+        id: get-issues
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.ACTION_TOKEN}}
+          script: |
+            const issueNumber = context.payload.issue.number
+            const issue = await github.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            })
+            const body = issue.data.body
+            const regex = /#\d+/g
+            const issues = body.match(regex)
+            return issues
+
+      - name: Log issues
+        if: steps.check-epic-label.outputs.result == 'true'
+        run: |
+          echo "The issues are: ${{steps.get-issues.outputs.result}}"
+
+      - name: Set epic issue number
+        if: steps.check-epic-label.outputs.result == 'true'
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.ACTION_TOKEN}}
+          script: |
+            const { github } = require('@actions/github')
+            const issueNumber = context.payload.issue.number
+            const issues = ${{steps.get-issues.outputs.result}}
+            const epicIssueNumber = ${{steps.get-epic-issue-number.outputs.result}}
+            for (const issue of issues) {
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue,
+                body: `From Epic: #${epicIssueNumber}`
+              })
+            }
