@@ -33,11 +33,10 @@ jobs:
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
           npm install @actions/github
-          npm install @actions/core
 
       - name: Get issue number
         if: steps.check-epic-label.outputs.result == 'true'
-        id: get-epic-issue-number
+        id: get_epic_issue_number
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
@@ -48,12 +47,12 @@ jobs:
       - name: Log issue number
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
-          echo "The Epic Issue number is: ${{steps.get-epic-issue-number.outputs.result}}"
+          echo "The Epic Issue number is: ${{steps.get_epic_issue_number.outputs.result}}"
 
 
       - name: Get issues mentioned in body
         if: steps.check-epic-label.outputs.result == 'true'
-        id: get-subtasks
+        id: get_subtasks
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
@@ -62,12 +61,12 @@ jobs:
               const regex = /- \[ \] #(\d+)/g
               const issues = body.match(regex)
               const rawIssueIds = issues.map(match => parseInt(match.split("#")[1]));
-              return rawIssueIds.toString()
+              return rawIssueIds
 
       - name: Log issues
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
-          echo "The sub taks are: ${{steps.get-subtasks.outputs.result}}"
+          echo "The sub taks are: ${{steps.get_subtasks.outputs.result}}"
       - name: Update Epic Subtask
         if: steps.check-epic-label.outputs.result == 'true'
         id: update-subtasks
@@ -75,16 +74,13 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const githubLib = require('@actions/github');
-            const githubCore = require('@actions/core');
+            const githubCore = require('@actions/github');
 
-            const githubContext = githubLib.context;
+            const githubContext = githubCore.context;
             const token = process.env.GITHUB_TOKEN;
-            const octokit = githubLib.getOctokit({ auth: token })
-            const epicIssueNumber = githubCore.getInput('get-epic-issue-number-result');
-            const subTaskIssueNumbers = githubCore.getInput('get-subtasks-result');
-            console.log({subTaskIssueNumbers})
-            console.log({ prevStep: process.env['get-epic-issue-number'], epicIssueNumber} )
+            const octokit = githubCore.getOctokit({ auth: token })
+            const epicIssueNumber = steps.get_epic_issue_number.outputs.result;
+            const subTaskIssueNumbers = steps.get_subtasks.outputs.result;
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
