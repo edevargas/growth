@@ -1,29 +1,22 @@
-name: Log Issue Body on Modify
+name: Log Issue Body
 
 on:
   issues:
     types: [edited]
 
 jobs:
-  log-issue-body:
+  log_body:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Log issue body
-        uses: actions/github-script@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Issue Body
+        id: get_body
+        uses: actions/bin/filter@v1
         with:
-          script: |
-            const github = require('@actions/github');
-            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+          args: echo "${{ toJson(github.event.issue) }}" | jq '.body'
+        env:
+          ISSUE_BODY: ${{ steps.get_body.outputs.stdout }}
 
-            const context = github.context;
-            const { data: issue } = await octokit.issues.get({
-              ...context.repo,
-              issue_number: context.payload.issue.number
-            });
-
-            console.log(issue.body);
+      - name: Log Issue Body
+        id: log_body
+        run: echo "$ISSUE_BODY"
