@@ -52,17 +52,18 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const { github } = require('@actions/github')
-            const issueNumber = context.payload.issue.number
-            const issue = await github.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber
-            })
-            const body = issue.data.body
-            const regex = /#\d+/g
-            const issues = body.match(regex)
-            return issues
+              const core = require('@actions/github')
+              const octokit = new core.GitHub(process.env.GITHUB_TOKEN)
+              const issueNumber = core.context.payload.issue.number
+              const { data: issue } = await octokit.issues.get({
+                owner: core.context.repo.owner,
+                repo: core.context.repo.repo,
+                issue_number: issueNumber
+              })
+              const body = issue.body
+              const regex = /#\d+/g
+              const issues = body.match(regex)
+              return issues
 
       - name: Log issues
         if: steps.check-epic-label.outputs.result == 'true'
