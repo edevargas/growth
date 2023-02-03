@@ -52,14 +52,7 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const { github } = require('@actions/github')
-            const issueNumber = context.payload.issue.number
-            const issue = await github.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber
-            })
-            const body = issue.data.body
+            const body = github.event.issue.body
             const regex = /#\d+/g
             const issues = body.match(regex)
             return issues
