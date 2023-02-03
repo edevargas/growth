@@ -6,10 +6,10 @@ jobs:
   handle-epics:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if ACTION_TOKEN exists
+      - name: Check if SOL_ACTION_TOKEN exists
         run: |
-          if [ -z "${{ secrets.ACTION_TOKEN }}" ]; then
-            echo "ACTION_TOKEN does not exist"
+          if [ -z "${{ secrets.SOL_ACTION_TOKEN }}" ]; then
+            echo "SOL_ACTION_TOKEN does not exist"
             exit 1
           fi
       - name: Setup Node.js
@@ -21,7 +21,7 @@ jobs:
         id: check-epic-label
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.ACTION_TOKEN}}
+          github-token: ${{secrets.SOL_ACTION_TOKEN}}
           script: |
             const label = context.payload.issue.labels.find(label => label.name === 'Epic')
             if (label) {
@@ -34,7 +34,7 @@ jobs:
         id: get-epic-issue-number
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.ACTION_TOKEN}}
+          github-token: ${{secrets.SOL_ACTION_TOKEN}}
           script: |
             const issueNumber = context.payload.issue.number
             return issueNumber
@@ -47,58 +47,36 @@ jobs:
 
       - name: Get issues mentioned in body
         if: steps.check-epic-label.outputs.result == 'true'
-        id: get-issues
+        id: get-subtasks
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.ACTION_TOKEN}}
+          github-token: ${{secrets.SOL_ACTION_TOKEN}}
           script: |
-              const core = require('@actions/github')
-              const octokit = new core.GitHub(process.env.GITHUB_TOKEN)
-              const issueNumber = core.context.payload.issue.number
-              const { data: issue } = await octokit.issues.get({
-                owner: core.context.repo.owner,
-                repo: core.context.repo.repo,
-                issue_number: issueNumber
-              })
-              const body = issue.body
-              const regex = /#\d+/g
-              const issues = body.match(regex)
-              return issues
-
-      - name: Get issues mentioned in body
-        if: steps.check-epic-label.outputs.result == 'true'
-        id: get-issues
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{secrets.ACTION_TOKEN}}
-          script: |
-              const { github } = require('@actions/github')
-              const octokit = new github.GitHub(process.env.GITHUB_TOKEN)
-              const issueNumber = github.context.payload.issue.number
-              const { data: issue } = await octokit.issues.get({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                issue_number: issueNumber
-              })
-              const body = issue.body
-              const regex = /#\d+/g
-              const issues = body.match(regex)
-              return issues
+            const { github } = require('@actions/github')
+            const issueNumber = context.payload.issue.number
+            const issue = await github.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            })
+            const body = issue.data.body
+            const regex = /#\d+/g
+            const issues = body.match(regex)
+            return issues
 
       - name: Log issues
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
-          echo "The issues are: ${{steps.get-issues.outputs.result}}"
+          echo "The issues are: ${{steps.get-subtasks.outputs.result}}"
 
       - name: Set epic issue number
         if: steps.check-epic-label.outputs.result == 'true'
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.ACTION_TOKEN}}
+          github-token: ${{secrets.SOL_ACTION_TOKEN}}
           script: |
-            const { github } = require('@actions/github')
             const issueNumber = context.payload.issue.number
-            const issues = ${{steps.get-issues.outputs.result}}
+            const issues = ${{steps.get-subtasks.outputs.result}}
             const epicIssueNumber = ${{steps.get-epic-issue-number.outputs.result}}
             for (const issue of issues) {
               await github.issues.update({
