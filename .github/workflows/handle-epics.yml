@@ -74,11 +74,11 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const { getOctokit } = require('@actions/github');
-            const githubContext = process.env.CONTEXT;
+            const githubCore = require('@actions/github');
+            const githubContext = githubCore.context;
             const token = ${{secrets.ACTION_TOKEN}};
             console.log({token, context});
-            const octokit = getOctokit({ auth: token })
+            const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = steps['get-epic-issue-number'].outputs.result;
             const subTaskIssueNumbers = steps['get-subtasks'].outputs.result;
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
@@ -91,7 +91,3 @@ jobs:
                 });
               });
             await Promise.all(promises);
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-          CONTEXT: ${{ toJson(context) }}
-
