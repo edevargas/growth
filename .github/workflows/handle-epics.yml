@@ -78,7 +78,7 @@ jobs:
             const githubCore = require('@actions/github');
 
             const githubContext = githubCore.context;
-            const token = process.env.GITHUB_TOKEN;
+            const token = process.env.ACTION_TOKEN;
             const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
             const subTaskIssueNumbers = ${{steps.get_subtasks.outputs.result}};
@@ -93,4 +93,4 @@ jobs:
               });
             await Promise.all(promises);
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          ACTION_TOKEN: ${{secrets.ACTION_TOKEN}}
