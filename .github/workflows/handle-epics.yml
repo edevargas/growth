@@ -44,7 +44,7 @@ jobs:
             const issueNumber = context.payload.issue.number
             return issueNumber
 
-      - name: Log issue number
+      - name: Log Epic issue number
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
           echo "The Epic Issue number is: ${{steps.get_epic_issue_number.outputs.result}}"
@@ -63,10 +63,11 @@ jobs:
               const rawIssueIds = issues.map(match => parseInt(match.split("#")[1]));
               return rawIssueIds
 
-      - name: Log issues
+      - name: Log sub tasks
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
           echo "The sub taks are: ${{steps.get_subtasks.outputs.result}}"
+
       - name: Update Epic Subtask
         if: steps.check-epic-label.outputs.result == 'true'
         id: update-subtasks
@@ -81,6 +82,7 @@ jobs:
             const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
             const subTaskIssueNumbers = ${{steps.get_subtasks.outputs.result}};
+            console.log({epicIssueNumber, subTaskIssueNumbers })
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
