@@ -1,0 +1,15 @@
+name: Check Token
+on:
+  issues:
+    types: [edited, labeled]
+jobs:
+  handle-epics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if GITHUB_TOKEN exists
+        run: |
+          if [ -z "${{ github.secrets.ACTION_TOKEN }}" ]; then
+            echo "GITHUB_TOKEN does not exist"
+          else
+            echo "GITHUB_TOKEN exists"
+          fi
