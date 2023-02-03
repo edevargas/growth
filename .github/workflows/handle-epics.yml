@@ -58,14 +58,15 @@ jobs:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
               const body = context.payload.issue.body
-              const regex = /#\d+/g
+              const regex = /- \[ \] #(\d+)/g
               const issues = body.match(regex)
-              return issues
+              const rawIssueIds = matches.map(match => parseInt(match.split("#")[1]));
+              return rawIssueIds
 
       - name: Log issues
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
-          echo "The issues are: ${{steps.get-subtasks.outputs.result}}"
+          echo "The sub taks are: ${{steps.get-subtasks.outputs.result}}"
 
       - name: Set epic issue number
         if: steps.check-epic-label.outputs.result == 'true'
@@ -75,8 +76,8 @@ jobs:
           script: |
             const epicIssueNumber = ${{steps.get-epic-issue-number.outputs.result}}
             const subtasks = ${{steps.get-subtasks.outputs.result}}
-            subtasks.forEach(subtask => {
-              const issueNumber = subtask.replace('#', '')
+            subtasks.forEach(async issueNumber => {
+
               const issue = await github.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
