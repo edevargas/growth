@@ -84,6 +84,7 @@ jobs:
             const epicIssueNumber = core.getInput('get-epic-issue-number-result');
             const subTaskIssueNumbers = core.getInput('get-subtasks-result');
             console.log({subTaskIssueNumbers})
+            log({ prevStep: process.env['get-epic-issue-number'], epicIssueNumber} )
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
