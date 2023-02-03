@@ -11,12 +11,12 @@ jobs:
     steps:
       - name: Get Issue Body
         id: get_body
-        uses: actions/bin/filter@v1
+        uses: actions/github-script@v5
         with:
-          args: echo "${{ toJson(github.event.issue) }}" | jq '.body'
-        env:
-          ISSUE_BODY: ${{ steps.get_body.outputs.stdout }}
+          script: |
+            const body = github.context.payload.issue.body;
+            return body;
 
-      - name: Log Issue Body
-        id: log_body
-        run: echo "$ISSUE_BODY"
+      - name: Log Body
+        run: |
+          echo "The body is: ${{steps.get_body.outputs.result}}"
