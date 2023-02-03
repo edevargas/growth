@@ -62,8 +62,7 @@ jobs:
 
               const issueNumber = githubCore.context.payload.issue.number
               const { data: issue } = await octokit.rest.issues.get({
-                owner: githubCore.context.repo.owner,
-                repo: githubCore.context.repo.repo,
+                ...githubCore.context.repo,
                 issue_number: issueNumber
               })
               const body = issue.body
