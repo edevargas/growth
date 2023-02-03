@@ -33,6 +33,7 @@ jobs:
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
           npm install @actions/github
+          npm install @actions/core
 
       - name: Get issue number
         if: steps.check-epic-label.outputs.result == 'true'
@@ -74,12 +75,14 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const githubCore = require('@actions/github');
-            const githubContext = githubCore.context;
+            const githubLib = require('@actions/github');
+            const githubCore = require('@actions/core');
+
+            const githubContext = githubLib.context;
             const token = process.env.GITHUB_TOKEN;
-            const octokit = githubCore.getOctokit({ auth: token })
-            const epicIssueNumber = githubContext.payload.steps['get-epic-issue-number'].outputs.result;
-            const subTaskIssueNumbers = githubContext.payload.steps['get-subtasks'].outputs.result;
+            const octokit = githubLib.getOctokit({ auth: token })
+            const epicIssueNumber = core.getInput('get-epic-issue-number-result');
+            const subTaskIssueNumbers = core.getInput('get-subtasks');
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
