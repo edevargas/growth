@@ -82,7 +82,7 @@ jobs:
             const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
             const subTaskIssueNumbers = ${{steps.get_subtasks.outputs.result}};
-            console.log({epicIssueNumber, subTaskIssueNumbers })
+            console.log({ repo: githubContext.repo })
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
@@ -95,4 +95,7 @@ jobs:
             await Promise.all(promises);
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
+      # I have this error in the previous step: Error: Unhandled error: HttpError: Bad credentials
+      # how fix that? I have the token in the repo secrets, and I have the same token in the check-token.yml file and it works fine.
+      # I have tried to use the GITHUB_TOKEN and the ACTION_TOKEN, but I have the same error.
+      # I have tried to use the GITHUB_TOKEN and the ACTION_TOKEN, but I have the same error.
