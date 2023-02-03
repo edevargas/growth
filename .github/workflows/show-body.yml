@@ -13,10 +13,10 @@ jobs:
         id: get_body
         uses: actions/github-script@v5
         with:
+          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const body = github.context.payload.issue.body;
-            return body;
-
-      - name: Log Body
+            const body = context.payload.issue.body
+            return body
+      - name: Log Issue Body
         run: |
-          echo "The body is: ${{steps.get_body.outputs.result}}"
+          echo "The issue body is: ${{steps.get_body.outputs.result}}"
