@@ -52,12 +52,12 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-              const core = require('@actions/github')
-              const octokit = new core.GitHub(process.env.GITHUB_TOKEN)
-              const issueNumber = core.context.payload.issue.number
+              const githubCore = require('@actions/github')
+              const octokit = new githubCore.GitHub(process.env.GITHUB_TOKEN)
+              const issueNumber = githubCore.context.payload.issue.number
               const { data: issue } = await octokit.issues.get({
-                owner: core.context.repo.owner,
-                repo: core.context.repo.repo,
+                owner: githubCore.context.repo.owner,
+                repo: githubCore.context.repo.repo,
                 issue_number: issueNumber
               })
               const body = issue.body
