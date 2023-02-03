@@ -29,6 +29,11 @@ jobs:
             }
             return false
 
+      - name: Install dependencies
+        if: steps.check-epic-label.outputs.result == 'true'
+        run: |
+          npm install @actions/github
+
       - name: Get issue number
         if: steps.check-epic-label.outputs.result == 'true'
         id: get-epic-issue-number
