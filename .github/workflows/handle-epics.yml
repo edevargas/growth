@@ -62,7 +62,7 @@ jobs:
               const regex = /- \[ \] #(\d+)/g
               const issues = body.match(regex)
               const rawIssueIds = issues.map(match => parseInt(match.split("#")[1]));
-              return rawIssueIds
+              return rawIssueIds.toString()
 
       - name: Log issues
         if: steps.check-epic-label.outputs.result == 'true'
