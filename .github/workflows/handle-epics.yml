@@ -74,7 +74,7 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const { getOctokit } = require('@actions/github');
+            const { getOctokit, context } = require('@actions/github');
             const token = ${{secrets.ACTION_TOKEN}};
             console.log({token});
             const octokit = getOctokit({ auth: token })
