@@ -57,7 +57,8 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-              const myToken = core.getInput(${{ secrets.ACTION_TOKEN }});
+              const githubCore = require('@actions/github');
+              const myToken = core.getInput(${{ secrets.GITHUB_TOKEN }});
               const octokit = github.getOctokit(myToken)
 
               const issueNumber = githubCore.context.payload.issue.number
