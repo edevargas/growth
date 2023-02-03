@@ -75,6 +75,7 @@ jobs:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const { getOctokit } = require('@actions/github');
+            const githubContext = process.env.CONTEXT;
             const token = ${{secrets.ACTION_TOKEN}};
             console.log({token, context});
             const octokit = getOctokit({ auth: token })
@@ -82,8 +83,8 @@ jobs:
             const subTaskIssueNumbers = steps['get-subtasks'].outputs.result;
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner: githubContext.repo.owner,
+                repo: githubContext.repo.repo,
                 issue_number: subTaskIssueNumber,
                 custom_field_name: "From Epic",
                 custom_field_value: epicIssueNumber
@@ -91,5 +92,6 @@ jobs:
               });
             await Promise.all(promises);
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_CONTEXT: ${{ toJson(github) }
+          CONTEXT: ${{ toJson(context) }}}
 
