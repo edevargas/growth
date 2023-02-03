@@ -1,0 +1,29 @@
+name: Log Issue Body on Modify
+
+on:
+  issues:
+    types: [edited]
+
+jobs:
+  log-issue-body:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log issue body
+        uses: actions/github-script@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const github = require('@actions/github');
+            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+
+            const context = github.context;
+            const { data: issue } = await octokit.issues.get({
+              ...context.repo,
+              issue_number: context.payload.issue.number
+            });
+
+            console.log(issue.body);
