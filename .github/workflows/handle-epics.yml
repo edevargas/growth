@@ -73,14 +73,28 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const issueNumber = context.payload.issue.number
-            const issues = ${{steps.get-subtasks.outputs.result}}
             const epicIssueNumber = ${{steps.get-epic-issue-number.outputs.result}}
-            for (const issue of issues) {
+            const subtasks = ${{steps.get-subtasks.outputs.result}}
+            subtasks.forEach(subtask => {
+              const issueNumber = subtask.replace('#', '')
+              const issue = await github.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              })
+              const epicField = issue.data.fields.find(field => field.name === 'from Epic')
+              if (epicField) {
+                epicField.value = epicIssueNumber
+              } else {
+                issue.data.fields.push({
+                  name: 'from Epic',
+                  value: epicIssueNumber
+                })
+              }
               await github.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: issue,
-                body: `From Epic: #${epicIssueNumber}`
+                issue_number: issueNumber,
+                fields: issue.data.fields
               })
-            }
+            })
