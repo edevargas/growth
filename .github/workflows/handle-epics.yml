@@ -60,7 +60,7 @@ jobs:
               const body = context.payload.issue.body
               const regex = /- \[ \] #(\d+)/g
               const issues = body.match(regex)
-              const rawIssueIds = matches.map(match => parseInt(match.split("#")[1]));
+              const rawIssueIds = issues.map(match => parseInt(match.split("#")[1]));
               return rawIssueIds
 
       - name: Log issues
