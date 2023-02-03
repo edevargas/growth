@@ -52,6 +52,7 @@ jobs:
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
+            const { github } = require('@actions/github')
             const issueNumber = context.payload.issue.number
             const issue = await github.issues.get({
               owner: context.repo.owner,
