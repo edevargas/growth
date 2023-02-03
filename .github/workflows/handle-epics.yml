@@ -79,6 +79,7 @@ jobs:
 
             const githubContext = githubCore.context;
             const token = process.env.ACTION_TOKEN;
+            console.log({token});
             const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
             const subTaskIssueNumbers = ${{steps.get_subtasks.outputs.result}};
