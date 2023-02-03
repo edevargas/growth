@@ -6,10 +6,10 @@ jobs:
   handle-epics:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if SOL_ACTION_TOKEN exists
+      - name: Check if ACTION_TOKEN exists
         run: |
-          if [ -z "${{ secrets.SOL_ACTION_TOKEN }}" ]; then
-            echo "SOL_ACTION_TOKEN does not exist"
+          if [ -z "${{ secrets.ACTION_TOKEN }}" ]; then
+            echo "ACTION_TOKEN does not exist"
             exit 1
           fi
       - name: Setup Node.js
@@ -21,7 +21,7 @@ jobs:
         id: check-epic-label
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.SOL_ACTION_TOKEN}}
+          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const label = context.payload.issue.labels.find(label => label.name === 'Epic')
             if (label) {
@@ -34,7 +34,7 @@ jobs:
         id: get-epic-issue-number
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.SOL_ACTION_TOKEN}}
+          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const issueNumber = context.payload.issue.number
             return issueNumber
@@ -50,7 +50,7 @@ jobs:
         id: get-subtasks
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.SOL_ACTION_TOKEN}}
+          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const { github } = require('@actions/github')
             const issueNumber = context.payload.issue.number
@@ -73,7 +73,7 @@ jobs:
         if: steps.check-epic-label.outputs.result == 'true'
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.SOL_ACTION_TOKEN}}
+          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const issueNumber = context.payload.issue.number
             const issues = ${{steps.get-subtasks.outputs.result}}
