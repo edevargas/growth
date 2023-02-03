@@ -19,4 +19,4 @@ jobs:
             return body
       - name: Log Issue Body
         run: |
-          console.log(${{steps.get_body.outputs.result}})
+          console.log( ${{steps.get_body.outputs.result}} )
