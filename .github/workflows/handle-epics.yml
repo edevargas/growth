@@ -67,35 +67,25 @@ jobs:
         if: steps.check-epic-label.outputs.result == 'true'
         run: |
           echo "The sub taks are: ${{steps.get-subtasks.outputs.result}}"
-
-      - name: Set epic issue number
+      - name: Update Epic Subtask
         if: steps.check-epic-label.outputs.result == 'true'
+        id: update-subtasks
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.ACTION_TOKEN}}
           script: |
-            const epicIssueNumber = ${{steps.get-epic-issue-number.outputs.result}}
-            const subtasks = ${{steps.get-subtasks.outputs.result}}
-            subtasks.forEach(async issueNumber => {
+            const githubCore = require('@actions/github');
+            const octokit = new githubCore.GitHub(process.env.GITHUB_TOKEN);
+            const epicIssueNumber = steps.get-epic-issue-number.outputs.result;
+            const subTaskIssueNumbers = steps.get-subtasks.outputs.result;
+            const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
+              return octokit.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: subTaskIssueNumber,
+                custom_field_name: "From Epic",
+                custom_field_value: epicIssueNumber
+                });
+              });
+            await Promise.all(promises);
 
-              const issue = await github.issues.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber
-              })
-              const epicField = issue.data.fields.find(field => field.name === 'from Epic')
-              if (epicField) {
-                epicField.value = epicIssueNumber
-              } else {
-                issue.data.fields.push({
-                  name: 'from Epic',
-                  value: epicIssueNumber
-                })
-              }
-              await github.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                fields: issue.data.fields
-              })
-            })
