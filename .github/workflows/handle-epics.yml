@@ -73,12 +73,11 @@ jobs:
         id: update-subtasks
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.ACTION_TOKEN}}
           script: |
             const githubCore = require('@actions/github');
 
             const githubContext = githubCore.context;
-            const token = process.env.ACTION_TOKEN;
+            const token = ${{GITHUB_TOKEN}};
             console.log({token});
             const octokit = githubCore.getOctokit({ auth: token })
             const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
@@ -94,4 +93,4 @@ jobs:
               });
             await Promise.all(promises);
         env:
-          ACTION_TOKEN: ${{secrets.ACTION_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.ACTION_TOKEN}}
