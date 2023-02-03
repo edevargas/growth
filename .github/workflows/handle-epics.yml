@@ -57,7 +57,7 @@ jobs:
         with:
           script: |
               const githubCore = require('@actions/github');
-              const octokit = githubCore.getOctokit({ auth: process.env.GITHUB_TOKEN})
+              const octokit = githubCore.getOctokit({ auth: "${{secrets.ACTION_TOKEN}}" })
 
               const issueNumber = githubCore.context.payload.issue.number
               const { data: issue } = await octokit.rest.issues.get({
