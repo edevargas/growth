@@ -93,5 +93,5 @@ jobs:
             await Promise.all(promises);
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }
-          CONTEXT: ${{ toJson(context) }}}
+          CONTEXT: ${{ toJson(context) }}
 
