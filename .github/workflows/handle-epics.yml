@@ -94,4 +94,5 @@ jobs:
               });
             await Promise.all(promises);
         env:
-          GITHUB_TOKEN: ${{secrets.ACTION_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
