@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Check if GITHUB_TOKEN exists
         run: |
-          if [ -z "${{ github.secrets.ACTION_TOKEN }}" ]; then
+          if [ -z "${{ secrets.ACTION_TOKEN }}" ]; then
             echo "GITHUB_TOKEN does not exist"
           else
             echo "GITHUB_TOKEN exists"
