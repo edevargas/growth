@@ -79,8 +79,8 @@ jobs:
             const githubContext = githubCore.context;
             const token = process.env.GITHUB_TOKEN;
             const octokit = githubCore.getOctokit({ auth: token })
-            const epicIssueNumber = steps.get_epic_issue_number.outputs.result;
-            const subTaskIssueNumbers = steps.get_subtasks.outputs.result;
+            const epicIssueNumber = ${{steps.get_epic_issue_number.outputs.result}};
+            const subTaskIssueNumbers = ${{steps.get_subtasks.outputs.result}};
             const promises = subTaskIssueNumbers.map( subTaskIssueNumber => {
               return octokit.rest.issues.update({
                 owner: githubContext.repo.owner,
